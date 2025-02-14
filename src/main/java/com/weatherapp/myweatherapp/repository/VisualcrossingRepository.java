@@ -1,6 +1,5 @@
 package com.weatherapp.myweatherapp.repository;
 
-import com.weatherapp.myweatherapp.exception.*;
 import com.weatherapp.myweatherapp.model.CityInfo;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -43,11 +42,11 @@ public class VisualcrossingRepository {
             ResponseEntity<CityInfo> response = restTemplate.getForEntity(uri, CityInfo.class);
             return response.getBody();
         } catch (HttpClientErrorException ex) {
-            // Let HTTP-specific exceptions (like 400, 429, etc.) propagate up
+            // Let HTTP-specific exceptions (400, 401, 404, 429, etc.) propagate up
             throw ex;
         } catch (RestClientException ex) {
             // Wrap other REST client exceptions
-            throw new WeatherApiException("Failed to fetch weather data for city: " + city, ex);
+            throw ex;
         }
     }
 }

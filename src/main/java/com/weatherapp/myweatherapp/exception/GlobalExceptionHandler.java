@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 
 
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
@@ -28,7 +29,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpClientErrorException.TooManyRequests.class)
     public ResponseEntity<ApiError> handleTooManyRequestsException(HttpClientErrorException.TooManyRequests ex) {
         logger.error("Rate limit exceeded: ", ex);
-        System.out.println("TEST TEST TEST");
         ApiError error = new ApiError(
             "Rate limit exceeded",
             "The weather service rate limit has been exceeded. Please try again later.",
@@ -46,6 +46,17 @@ public class GlobalExceptionHandler {
             HttpStatus.UNAUTHORIZED.toString()
         );
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BadLocationException.class)
+    public ResponseEntity<ApiError> handleBadLocationException(BadLocationException ex) {
+        logger.error("Bad Location Provided to Weather API: ", ex);
+        ApiError error = new ApiError(
+            "Weather service error",
+            ex.getMessage(),
+            HttpStatus.BAD_REQUEST.toString()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(WeatherApiException.class)
