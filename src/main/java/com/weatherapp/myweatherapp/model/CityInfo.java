@@ -30,6 +30,10 @@ public class CityInfo {
     return this.currentConditions.conditions;
   }
 
+  public String getAddress() {
+    return this.address;
+  }
+
   static class CurrentConditions {
     @JsonProperty("temp")
     String currentTemperature;
